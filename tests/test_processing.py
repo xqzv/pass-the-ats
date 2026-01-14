@@ -8,20 +8,23 @@ class TestProcessing(unittest.TestCase):
         self.assertEqual(clean_text("PYTHON"), "python")
 
     def test_remove_punctuation(self):
-        """Test that non-alphanumeric characters are removed."""
+        """Test that non-alphanumeric characters are removed, but emails/urls preserved."""
         self.assertEqual(clean_text("Hello, World!"), "hello world")
-        self.assertEqual(clean_text("Email: test@example.com"), "email testexamplecom")
+        # SpaCy logic preserves emails if clean_text supports it
+        self.assertEqual(clean_text("Email: test@example.com"), "email test@example.com")
         self.assertEqual(clean_text("C++"), "c")
 
     def test_numbers_preserved(self):
         """Test that numbers are preserved."""
-        self.assertEqual(clean_text("Python 3.10"), "python 310")
+        # SpaCy preserves version numbers (like_num)
+        self.assertEqual(clean_text("Python 3.10"), "python 3.10")
         self.assertEqual(clean_text("Year 2023"), "year 2023")
 
-    def test_whitespace_preserved(self):
-        """Test that whitespace (spaces, newlines, tabs) is preserved."""
+    def test_whitespace_normalized(self):
+        """Test that whitespace is normalized to single spaces."""
+        # Note: New implementation normalizes all whitespace to single spaces
         text = "Line 1\nLine 2\tTabbed"
-        expected = "line 1\nline 2\ttabbed"
+        expected = "line 1 line 2 tabbed"
         self.assertEqual(clean_text(text), expected)
 
     def test_empty_string(self):

@@ -18,12 +18,14 @@ class TestIngestion(unittest.TestCase):
             os.remove(self.test_txt)
 
     def test_read_txt(self):
-        content = read_txt(self.test_txt)
+        content, warnings = read_txt(self.test_txt)
         self.assertEqual(content, "Hello World")
+        self.assertEqual(warnings, [])
 
     def test_load_file_txt(self):
-        content = load_file(self.test_txt)
+        content, warnings = load_file(self.test_txt)
         self.assertEqual(content, "Hello World")
+        self.assertEqual(warnings, [])
 
     def test_load_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
