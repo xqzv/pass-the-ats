@@ -1,7 +1,11 @@
 [project]
 name = "PassTheATS"
 version = "0.1.0"
-description = "Add your description here"
+description = "Minimalist Structure-Aware ATS Simulator"
 readme = "README.md"
-requires-python = ">=3.14"
-dependencies = []
+requires-python = ">=3.10"
+dependencies = [
+    "scikit-learn",
+    "pypdf",
+    "python-docx",
+]
