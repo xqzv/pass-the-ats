@@ -1,29 +1,29 @@
-# PassTheATS 
+# NLP Skill Matcher
 
-**Stop guessing why you're not getting calls. Optimize your resume offline.**
+**Quantify the relevance of your resume to job descriptions using local NLP analysis.**
 
-PassTheATS is a lightweight, privacy-focused CLI tool that simulates how Applicant Tracking Systems (ATS) score your resume against job descriptions.
+This project is a lightweight, privacy-focused CLI tool designed to help candidates tailor their applications. It uses Natural Language Processing (TF-IDF & Cosine Similarity) to analyze how well a resume aligns with specific job requirements.
 
-##  Key Benefits
+## Key Benefits
 
-*   **Privacy-First:** Your data never leaves your computer. No uploading resumes to third-party servers.
-*   **Specific & Fast:** Uses industry-standard NLP (TF-IDF & Cosine Similarity) for instant scoring.
-*   **Developer-Ready:** A clean CLI tool that fits right into your terminal workflow.
-*   **Actionable:** Get a percentage match and see exactly which keywords you are missing.
+*   **Privacy-First:** Data processing happens locally. No personal documents are uploaded to external servers.
+*   **Transparent Metrics:** Uses standard NLP techniques to provide an objective relevance score.
+*   **Developer-Ready:** A clean CLI tool that integrates into a terminal workflow.
+*   **Insightful:** Identifies potential skill gaps by comparing vocabulary between documents.
 
-##  Upcoming Features
+## Upcoming Features
 
 *   **resume.pdf** & **job.docx** parsing support.
-*   Match Score % calculation.
-*   Missing keyword analysis.
+*   Relevance Score % calculation.
+*   Skill gap analysis.
 
-##  Usage
+## Usage
 
-`ash
+```bash
 python main.py --resume "my_cv.pdf" --job "job_description.txt"
-`
+```
 
-##  Tech Stack
+## Tech Stack
 
 *   **Python 3.10+**
 *   **scikit-learn** (Vectorization)
