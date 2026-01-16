@@ -10,6 +10,7 @@ dependencies = [
     "python-docx",
     "spacy>=3.8.11",
     "en-core-web-sm",
+    "lxml>=6.0.2",
 ]
 
 [tool.uv.sources]

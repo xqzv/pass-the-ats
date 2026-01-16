@@ -6,20 +6,11 @@ import docx
 ExtractionResult = Tuple[str, List[str]]
 
 def read_txt(filepath: str) -> ExtractionResult:
-    """
-    Reads a text file and returns its content as a string.
-    
-    Args:
-        filepath: Path to the .txt file.
-        
-    Returns:
-        A tuple containing the content of the file and a list of warnings (empty for txt).
-    """
+    """Reads a text file and returns its content as a string."""
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             return f.read(), []
     except UnicodeDecodeError:
-        # Fallback to latin-1 if utf-8 fails
         try:
             with open(filepath, 'r', encoding='latin-1') as f:
                 return f.read(), ["Warning: File read with latin-1 encoding due to utf-8 error."]
@@ -29,21 +20,12 @@ def read_txt(filepath: str) -> ExtractionResult:
         raise ValueError(f"Error reading text file {filepath}: {e}")
 
 def read_pdf(filepath: str) -> ExtractionResult:
-    """
-    Extracts text from a PDF file and checks for potential ATS issues.
-    
-    Args:
-        filepath: Path to the .pdf file.
-        
-    Returns:
-        A tuple containing extracted text and a list of warnings (e.g., images detected).
-    """
+    """Extracts text from a PDF file and checks for potential ATS issues."""
     text = []
     warnings = []
     try:
         reader = pypdf.PdfReader(filepath)
         
-        # Check for encryption
         if reader.is_encrypted:
             warnings.append("PDF is encrypted. This might block some ATS parsers.")
             try:
@@ -56,7 +38,6 @@ def read_pdf(filepath: str) -> ExtractionResult:
             if page_text:
                 text.append(page_text)
             
-            # 6.2 Image/Icon Detection
             if len(page.images) > 0:
                 warnings.append(f"Page {i+1}: Contains {len(page.images)} images. Text inside images is not readable by most ATS.")
 
@@ -70,25 +51,15 @@ def read_pdf(filepath: str) -> ExtractionResult:
         raise ValueError(f"Error reading PDF file {filepath}: {e}")
 
 def read_docx(filepath: str) -> ExtractionResult:
-    """
-    Extracts text from a DOCX file and checks for potential ATS issues.
-    
-    Args:
-        filepath: Path to the .docx file.
-        
-    Returns:
-        A tuple containing extracted text and a list of warnings (e.g., tables detected).
-    """
+    """Extracts text from a DOCX file and checks for potential ATS issues."""
     warnings = []
     try:
         doc = docx.Document(filepath)
         text = "\n".join([para.text for para in doc.paragraphs])
         
-        # 6.1 Table Detection
         if len(doc.tables) > 0:
             warnings.append(f"Detected {len(doc.tables)} tables. Tables can cause parsing errors in older ATS systems.")
             
-        # Check for images/shapes (basic check)
         if len(doc.inline_shapes) > 0:
             warnings.append(f"Detected {len(doc.inline_shapes)} inline images/shapes. Ensure these do not contain critical text.")
 
@@ -97,34 +68,12 @@ def read_docx(filepath: str) -> ExtractionResult:
         raise ValueError(f"Error reading DOCX file {filepath}: {e}")
 
 def read_md(filepath: str) -> ExtractionResult:
-    """
-    Reads a Markdown file and returns its content as a string.
-    
-    Args:
-        filepath: Path to the .md file.
-        
-    Returns:
-         A tuple containing the content of the file and a list of warnings.
-    """
-    # Markdown files are text files, so we can reuse the logic or just open and read.
-    # We treat it as raw text; the cleaner will handle special chars later.
+    """Reads a Markdown file and returns its content as a string."""
     with open(filepath, 'r', encoding='utf-8') as f:
         return f.read(), []
 
 def load_file(filepath: str) -> ExtractionResult:
-    """
-    Detects file extension and routes to the correct reader.
-    
-    Args:
-        filepath: Path to the file to read.
-        
-    Returns:
-        A tuple containing the extracted text and a list of warnings.
-        
-    Raises:
-        FileNotFoundError: If the file does not exist.
-        ValueError: If the file format is unsupported.
-    """
+    """Detects file extension and routes to the correct reader."""
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"File not found: {filepath}")
 
@@ -152,7 +101,6 @@ def load_file(filepath: str) -> ExtractionResult:
     ext = os.path.splitext(filepath)[1].lower()
     
     if ext not in readers:
-        # Check if file has no extension
         if ext == '' and os.path.isfile(filepath):
             print(f"Warning: File '{filepath}' has no extension. Attempting to process as text file.")
             return read_txt(filepath)
